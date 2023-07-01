@@ -1,13 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import './assets/global.css';
+// Bootstrap
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.js';
+import App from './layouts/App';
 import reportWebVitals from './reportWebVitals';
-
+import { BrowserRouter as Router } from "react-router-dom";
+// Redx
+import { Provider } from "react-redux";
+import store from './redux/store';
+// Toast
+import 'react-toastify/dist/ReactToastify.css';
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+
+
+document.title = "CRUD || React"
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <Router>
+        <App />
+      </Router>
+    </Provider>
   </React.StrictMode>
 );
 
