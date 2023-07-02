@@ -1,6 +1,6 @@
 export default class Helper {
     static isValid(value) {
-        return (value != undefined && value != null && value.length > 0)
+        return (value !== undefined && value !== null && (isNaN(value) ? value.length > 0 : value > 0))
     }
     static formValidate(obj) {
         let error = {}

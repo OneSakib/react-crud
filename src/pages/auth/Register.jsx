@@ -26,10 +26,12 @@ export default class Register extends Component {
         const { error, is_valid } = Helper.formValidate(this.state.formData);
         this.setState({ formError: error })
         if (is_valid) {
+            this.setState({ 'submitted': true })
             registerService(this.state.formData).catch(async err => {
                 this.props.toast.error(await err?.response?.data?.message)
+                this.setState({ 'submitted': false })
             }).then(async res => {
-                if (res != undefined) {
+                if (res !== undefined) {
                     this.props.toast.success("successfully Register!, now you can login")
                     this.props.navigation('/login')
                 }
@@ -62,7 +64,8 @@ export default class Register extends Component {
                     <input type="password" className="form-control" id="password" placeholder="zsdfdfghkerkjkwer7e678b" name="password" onChange={this.handleChange} />
                     <span className='text-danger'>{this.state.formError?.password !== '' && (this.state.formError?.password)}</span>
                 </div>
-                <button className="btn btn-primary" disabled={this.state.submitted}>Register</button>
+                <button className="btn btn-primary" disabled={this.state.submitted}>Register
+                    {this.state.submitted ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : ''}</button>
             </form>
         )
     }

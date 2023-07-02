@@ -1,6 +1,14 @@
 import React, { Component } from 'react'
 import $ from 'jquery'
 export default class Modal extends Component {
+    constructor() {
+        super()
+        this.confirm = this.confirm.bind(this);
+    }
+    confirm() {
+        $('#closeModal').trigger('click')
+        this.props.confirmDelete()
+    }
     render() {
         return (
             <div>
@@ -13,7 +21,7 @@ export default class Modal extends Component {
                             </div>
                             <div className="modal-footer">
                                 <button type="button" id="closeModal" className="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                <button type="button" className="btn btn-primary"> Yes</button>
+                                <button type="button" className="btn btn-primary" onClick={this.confirm}>Yes</button>
                             </div>
                         </div>
                     </div>

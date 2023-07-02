@@ -19,8 +19,9 @@ class App extends Component {
     )
   }
 }
-export default function (props) {
+const Wrapper = (props) => {
   const navigation = useNavigate()
   return <App {...props} navigation={navigation} toast={toast} />;
 }
+export default Wrapper
 

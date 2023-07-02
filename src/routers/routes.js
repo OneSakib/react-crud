@@ -1,4 +1,4 @@
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useMatch } from "react-router-dom";
 // Pages
 import Index from "../pages/crud/Index";
 import Login from "../pages/auth/Login";
@@ -8,21 +8,21 @@ import Update from "../pages/crud/Update";
 import { toast } from 'react-toastify'
 // Protected Route
 import Protected from "../layouts/Protected";
+import Auth from '../layouts/Auth'
 export default function ReactRouter() {
     const navigation = useNavigate()
+    const match = useMatch('/update/:id')
     return (
         <Routes>
-            <Route exact path='/' element={<Protected >
-                <Index navigation={navigation} />
-            </Protected>} ></Route>
-            <Route exact path='/login' element={<Login navigation={navigation} toast={toast} />} ></Route>
-            <Route exact path='/register' element={<Register navigation={navigation} toast={toast} />} ></Route>
-            <Route exact path='/create' element={<Protected >
-                <Create navigation={navigation} toast={toast} />
-            </Protected>} ></Route>
-            <Route exact path='/update' element={<Protected >
-                <Update navigation={navigation} toast={toast} />
-            </Protected>} ></Route>
+            <Route element={<Auth />}>
+                <Route exact path='/login' element={<Login navigation={navigation} toast={toast} />} ></Route>
+                <Route exact path='/register' element={<Register navigation={navigation} toast={toast} />} ></Route>
+            </Route>
+            <Route element={<Protected />}>
+                <Route exact path="/" element={<Index navigation={navigation} toast={toast} />} />
+                <Route exact path='/create' element={<Create navigation={navigation} toast={toast} />} />
+                <Route exact path='/update/:id' element={<Update navigation={navigation} match={match} toast={toast} />} />
+            </Route>
         </Routes>
     )
 }

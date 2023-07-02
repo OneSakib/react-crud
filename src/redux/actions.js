@@ -5,10 +5,10 @@ const addPost = (post) => {
     }
 }
 
-const userLogin = (user) => {
-    return {
-        type: "user",
-        payload: { isLoggedIn: user.isLoggedIn, data: user.data }
-    }
-}
-export { addPost, userLogin }
+// const userLogin = (user) => {
+//     return {
+//         type: "user",
+//         payload: { isLoggedIn: user.isLoggedIn, data: user.data }
+//     }
+// }
+export { addPost }

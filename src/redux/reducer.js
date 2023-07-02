@@ -7,17 +7,17 @@ const postReducer = (state = [], action) => {
         default: return state
     }
 }
-const authReducer = (state = [], action) => {
-    switch (action.type) {
-        case 'user':
-            return [...state, { isLoggedIn: action.payload.isLoggedIn, data: action.payload.data }]
-        default: return state
-    }
-}
+// const authReducer = (state = [], action) => {
+//     switch (action.type) {
+//         case 'user':
+//             return [...state, { isLoggedIn: action.payload.isLoggedIn, data: action.payload.data }]
+//         default: return state
+//     }
+// }
 
 
 const rootReducer = combineReducers({
     posts: postReducer,
-    isLoggedIn: authReducer
+    // isLoggedIn: authReducer
 });
 export default rootReducer; 

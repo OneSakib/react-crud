@@ -1,23 +1,24 @@
-import { connect } from 'react-redux'
-import { addPost, userLogin } from '../../redux/actions'
+// import { connect } from 'react-redux'
 import { Component } from 'react'
 import Helper from '../../utils/helper';
-class Create extends Component {
+import { createEmployee } from '../../services/config.service';
+export default class Create extends Component {
     constructor() {
         super()
         this.state = {
             formData: {
-                first_name: '',
-                last_name: '',
+                firstName: '',
+                lastName: '',
                 age: '',
                 address: ''
             },
             formError: {
-                first_name: '',
-                last_name: '',
+                firstName: '',
+                lastName: '',
                 age: '',
                 address: ''
-            }
+            },
+            submitted: false
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,8 +26,19 @@ class Create extends Component {
     }
     handleSubmit(event) {
         event.preventDefault()
-        this.setState({ formError: Helper.formValidate(this.state.formData) })
-        console.log("CALLED", this.state.formData)
+        const { error, is_valid } = Helper.formValidate(this.state.formData)
+        this.setState({ formError: error })
+        if (is_valid) {
+            this.setState({ submitted: true })
+            createEmployee(this.state.formData).catch(async err => {
+                console.log("ERROR: ", await err?.response?.data)
+            }).then(async res => {
+                if (res !== undefined) {
+                    this.props.toast.success("Successfully Add new Employee")
+                    this.props.navigation('/')
+                }
+            })
+        }
     }
     handleChange(event) {
         const name = event.target.name;
@@ -40,14 +52,14 @@ class Create extends Component {
                 <h3 className="text-center">Add New Employee</h3>
                 <hr />
                 <div className="mb-3">
-                    <label htmlFor="first_name" className="form-label">First Name</label>
-                    <input type="text" className="form-control" id="first_name" placeholder="John" name='first_name' onChange={this.handleChange} />
-                    <span className='text-danger'>{this.state.formError?.first_name !== '' && (this.state.formError?.first_name)}</span>
+                    <label htmlFor="firstName" className="form-label">First Name</label>
+                    <input type="text" className="form-control" id="firstName" placeholder="John" name='firstName' onChange={this.handleChange} />
+                    <span className='text-danger'>{this.state.formError?.firstName !== '' && (this.state.formError?.firstName)}</span>
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="last_name" className="form-label">Last Name</label>
-                    <input type="text" className="form-control" id="last_name" placeholder="Wick" name='last_name' onChange={this.handleChange} />
-                    <span className='text-danger'>{this.state.formError?.last_name !== '' && (this.state.formError?.last_name)}</span>
+                    <label htmlFor="lastName" className="form-label">Last Name</label>
+                    <input type="text" className="form-control" id="lastName" placeholder="Wick" name='lastName' onChange={this.handleChange} />
+                    <span className='text-danger'>{this.state.formError?.lastName !== '' && (this.state.formError?.lastName)}</span>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="age" className="form-label">Age</label>
@@ -59,16 +71,16 @@ class Create extends Component {
                     <textarea className="form-control" id="address" placeholder="Vill Aghyana" name='address' onChange={this.handleChange}></textarea>
                     <span className='text-danger'>{this.state.formError?.address !== '' && (this.state.formError?.address)}</span>
                 </div>
-                <button className="btn btn-primary">Add</button>
+                <button className="btn btn-primary" disabled={this.state.submitted}>Add {this.state.submitted ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : ''}</button>
             </form>
         )
     }
 }
-const mapDispatchToProps = dispatch => {
-    return {
-        addPost: post => dispatch(addPost(post)),
-        userLogin: user => dispatch(userLogin(user))
-    }
-}
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         addPost: post => dispatch(addPost(post)),
+//         userLogin: user => dispatch(userLogin(user))
+//     }
+// }
 
-export default connect(null, mapDispatchToProps)(Create)
+// export default connect(null, mapDispatchToProps)(Create)

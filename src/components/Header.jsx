@@ -1,8 +1,16 @@
 import { Component } from "react"
-
+import { logout } from '../services/config.service'
+import { getUser } from "../services/config.service";
 export default class Header extends Component {
-    notify = () => {
-        console.log("CALLED", this.props.toast.error("Wow"))
+    constructor() {
+        super()
+        this.state = { 'user': getUser() }
+        this.logout = this.logout.bind(this);
+    }
+    logout() {
+        logout();
+        this.props.navigation('/login')
+        this.forceUpdate()
     }
     render() {
         return (
@@ -16,10 +24,16 @@ export default class Header extends Component {
                             </li>
                         </ul>
                         <div className="d-flex" role="search">
-                            <h5>Welcome,maliksakib347@gmail.com</h5>
-                            <button className='btn btn-primary mx-3' onClick={() => { this.props.navigation('/login') }}>Login</button>
-                            <button className='btn btn-primary mx-3' onClick={() => { this.props.navigation('/register') }}>Register</button>
-                            <button className='btn btn-danger mx-3' onClick={this.notify}>Logout</button>
+                            {
+                                this.state.user ? <h5>Welcome, {this.state?.user?.email}</h5> : ''
+                            }
+                            {
+                                this.state.user ? <button className='btn btn-danger mx-3' onClick={this.logout}>Logout</button> : <>
+                                    <button className='btn btn-primary mx-3' onClick={() => { this.props.navigation('/login') }}>Login</button>
+                                    <button className='btn btn-primary mx-3' onClick={() => { this.props.navigation('/register') }}>Register</button></>
+                            }
+
+
                         </div>
                     </div>
                 </div>
